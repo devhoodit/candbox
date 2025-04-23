@@ -8,7 +8,7 @@ const SyscallRule &SandboxRule::get_sysrule(int syscall) const {
     auto rule = syscall_rules.find(syscall);
     if (rule == syscall_rules.end())  // no corresponding rule -> return default rule
     {
-        return _default_rule;
+        return _default_syscall_rule;
     } else {
         return rule->second;
     }
