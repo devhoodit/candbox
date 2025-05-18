@@ -22,6 +22,15 @@ public:
     const SyscallRuleType type() const { return _type; }
 };
 
+class NamespaceRule {
+    bool new_pid;
+    bool new_user;
+
+public:
+    NamespaceRule(bool new_pid, bool new_user) : new_pid(new_pid), new_user(new_user) {}
+    int get_clone_option();
+};
+
 class SandboxRule {
     /**
      * @brief Rules corresponding to syscalls
@@ -29,15 +38,20 @@ class SandboxRule {
      * corresponding rule
      */
     std::unordered_map<int, SyscallRule> syscall_rules;
-    SyscallRule _default_rule;
+    SyscallRule _default_syscall_rule;
+    NamespaceRule _namespace_rule;
 
 public:
     SandboxRule(std::unordered_map<int, SyscallRule> syscall_rules,
-                SyscallRule default_rule = SyscallRule(SyscallRuleType::DISALLOW))
-        : syscall_rules(syscall_rules), _default_rule(default_rule) {};
+                SyscallRule default_rule = SyscallRule(SyscallRuleType::DISALLOW),
+                NamespaceRule namespace_rule = NamespaceRule(false, false))
+        : syscall_rules(syscall_rules),
+          _default_syscall_rule(default_rule),
+          _namespace_rule(namespace_rule) {};
     const SyscallRule &get_sysrule(int syscall) const;
     const std::unordered_map<int, SyscallRule> &get_sysrule_map() const { return syscall_rules; };
-    const SyscallRule get_default_rule() const { return _default_rule; }
+    const SyscallRule get_default_syscall_rule() const { return _default_syscall_rule; }
+    const NamespaceRule get_namespace_rule() const { return _namespace_rule; }
 };
 
 };  // namespace candbox

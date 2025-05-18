@@ -92,8 +92,11 @@ std::unordered_map<int, SyscallRule> syscall_rule = {
     {1, SyscallRule(SyscallRuleType::ALLOW)},
 };
 
+// namespace rule
+NamespaceRule namespace_rule = NamespaceRule(false, false);
+
 // create Sandbox ruleset with default and specific rules
-SandboxRule sandbox_rule = SandboxRule(syscall_rule, default_rule);
+SandboxRule sandbox_rule = SandboxRule(syscall_rule, default_rule, namespace_rule=namespace_rule);
 ```
 
 ### Candbox execve
